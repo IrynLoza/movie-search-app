@@ -14,29 +14,35 @@ app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
 def root():
     return render_template('index.html')
 
+#TODO 
+#Change to get
 @app.route('/api/movies', methods = ['POST'])
 def get_titles():
     """Get all titles by name"""
     data = request.data
-    dataDict = json.loads(data)
-    name = dataDict['name']
+    data_dict = json.loads(data)
+    name = data_dict['name']
     print(f'data===>> {name}')
-    response = requests.get(f'http://www.omdbapi.com/?s={name}&apikey=fea3251d&')
+    response_title = requests.get(f'http://www.omdbapi.com/?s={name}&apikey=fea3251d&')
+    # response_year = 
 
-    list_of_movies = response.json()
+    list_of_movies = response_title.json()
     titles = []
+    years = []
     total_results = len(list_of_movies['Search'])
 
     if total_results > 0:
         for i in range(total_results):
             title = list_of_movies['Search'][i].get('Title')
+            year = list_of_movies['Search'][i].get('Year')
             titles.append(title)
+            years.append(year)
             
         print(titles)
     else:
         print('No such a movie')    
 
-    return jsonify({'status': 'ok', 'titles': titles})
+    return jsonify({'status': 'ok', 'titles': titles, 'years': years})
 
 
 

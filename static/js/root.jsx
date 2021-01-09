@@ -9,11 +9,12 @@ const Redirect = ReactRouterDOM.Redirect;
 const useLocation = ReactRouterDOM.useLocation;
 const useHistory = ReactRouterDOM.useHistory;
 
-//Create component to handle Homepage
+//Create component to handle web page with Search
 function Search() {
 
     const [name, setName] = React.useState('');
-    console.log(name)
+    const [titles, setTitles] = React.useState([]);
+    const [years, setYears] = React.useState([]);
     
     function search() {
     
@@ -29,7 +30,8 @@ function Search() {
             .then(data => {
                 console.log(data)
                 if (data.status === 'ok') {
-                    console.log(`data with titles===>${data.titles}`)
+                    setTitles(data.titles)
+                    setYears(data.years)
                 } 
             })
             // Handle error
@@ -40,12 +42,26 @@ function Search() {
 
     
 
+
     return (
         <div>
             <p>The Shoppies!</p>
             <label htmlFor="search">Movie title</label>
             <br></br>
             <input id="search" type="text" placeholder="Search.." onChange={e => { setName(e.target.value)}} onKeyPress={event => {if (event.key === "Enter") {search()}}}></input>
+            <button name="search" onClick={search}>Search</button>
+            <br></br>
+            <p>Result for "{name}"</p>
+            <br></br>
+            <ul>
+                {titles.map((el, index) => {
+                    let year = years[index];
+                            return (
+                                <li key={index}>{el} {year} <button name="nominate">Nominate</button></li>
+                            )
+                        })}
+            </ul>
+
         </div>
     )
 }
