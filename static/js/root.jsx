@@ -14,13 +14,14 @@ function Search() {
 
     const [name, setName] = React.useState('');
     const [titles, setTitles] = React.useState([]);
+    const [movies, setMovies] = React.useState([]);
     const [years, setYears] = React.useState([]);
+    const [pages, setPages] = React.useState([]);
     
-    function search() {
-    
+    function search(value) {
         fetch('/api/movies', {
-            method: 'POST',
-            body: JSON.stringify({name}),
+            method: 'POST', 
+            body: JSON.stringify({ name, page: value}),
             header: {
                 'Content-Type': 'application/json',
                 // 'Accept': 'application/json'
@@ -30,9 +31,10 @@ function Search() {
             .then(data => {
                 console.log(data)
                 if (data.status === 'ok') {
-                    setTitles(data.titles)
-                    setYears(data.years)
+                    setMovies(data.response.Search)
+                    setPages(Math.round(data.response.totalResults / 10))
                 } 
+
             })
             // Handle error
             .catch(err => {
@@ -40,8 +42,11 @@ function Search() {
               });
     }
 
-    
+   
 
+    
+    
+    
 
     return (
         <div>
@@ -49,25 +54,40 @@ function Search() {
             <label htmlFor="search">Movie title</label>
             <br></br>
             <input id="search" type="text" placeholder="Search.." onChange={e => { setName(e.target.value)}} onKeyPress={event => {if (event.key === "Enter") {search()}}}></input>
-            <button name="search" onClick={search}>Search</button>
+            <button name="search" onClick={() => { search(1)}}>Search</button>
             <br></br>
             <p>Result for "{name}"</p>
             <br></br>
             <ul>
-                {titles.map((el, index) => {
-                    let year = years[index];
+                {movies.map((el, index) => {
                             return (
-                                <li key={index}>{el} {year} <button name="nominate">Nominate</button></li>
+                                <li key={index}>
+                                    <div>{el.Title} ({el.Year}) <button id="nominate">Nominate</button></div>
+                                </li>
                             )
                         })}
             </ul>
+            <div className="pagination">
+                <a href="#">&laquo;</a>
+                { Array.apply(null, Array(pages)).map((el, index) => {
+                            return (
+                                <a href="#" onClick={() => { search(index+1)}} key={index}>{index+1}</a>
+                            )
+                        })}
+
+               
+                <a href="#">&raquo;</a>
+            </div>
+            <br></br>
+            {/* <p>Nominations</p>
+            <br></br>
+            <ul>
+                <li>{movie}</li>
+            </ul> */}
 
         </div>
     )
 }
-
-
-
 
 
 function App() {
