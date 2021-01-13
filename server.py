@@ -43,7 +43,6 @@ def get_titles():
     # titles = []
     # years = []
    
-#    res = [ sub['gfg'] for sub in test_list ] 
     # if total_results > 0:
     #     pages = round(len(full_list_of_movies)// 10) 
     #     for i in range(len(full_list_of_movies)):
@@ -69,11 +68,6 @@ def get_titles():
     # return jsonify({'status': 'ok', 'titles': titles, 'years': years, 'pages': pages})
 
     return jsonify({'status': 'ok', 'response': list_of_movies })
-
-
-
-
-
 
 
 
