@@ -19,6 +19,7 @@ function Search() {
     const [disabled, setDisabled] = React.useState(false)
 
 
+
     
     function search(value) {
         if (name) {
@@ -34,7 +35,13 @@ function Search() {
                 .then(data => {
                     console.log(data)
                     if (data.status === 'ok') {
-                        setMovies(data.response.Search)
+                        //Add active key to object 
+                        setMovies(data.response.Search.map(el => {
+                            return {
+                                active: false,
+                                ...el
+                            }
+                        }))
                         setPages(Math.round(data.response.totalResults / 10))
                     } 
 
@@ -49,6 +56,7 @@ function Search() {
    
 
     function nominate(el) {
+        el.active = true;
         // console.log(el)
         if (nominates.length < 5) {
             setNominate([...nominates, el])
@@ -65,25 +73,16 @@ function Search() {
 
   
 
-    function removeNominate(el) {
-        console.log(el)
-        const index = nominates.indexOf(el);
-        if (index > -1) {
+    function removeNominate(el, index) {
+        // const index = nominates.indexOf(el);
         nominates.splice(index, 1);
-        }
-        setDisabled(false)
+        console.log('nominates==>', nominates)
+        console.log('nominates==>', nominates)
+        setNominate([...nominates])
+        el.active = false;
     }
 
 
-
-    
-
-
-
-
-    
-
-    
     return (
         <div>
             <p>The Shoppies!</p>
@@ -97,7 +96,7 @@ function Search() {
                 {movies.map((el, index) => {
                             return (
                                 <li key={index}>
-                                    <div><img height="70" width="50" src={el.Poster}></img>{el.Title} ({el.Year}) <button id="nominate" disabled={disabled} onClick={e => {nominate(el), setDisabled(true)}}>Nominate</button></div>
+                                    <div><img height="70" width="50" src={el.Poster}></img>{el.Title} ({el.Year}) <button id="nominate" disabled={el.active} onClick={e => {nominate(el)}}>Nominate</button></div>
                                 </li>
                             )
                         })}
@@ -118,7 +117,7 @@ function Search() {
                 {nominates.map((el, index) => {
                             return (
                                 <li key={index}>
-                                    <div>{el.Title} ({el.Year}) <button id="remove-nominate" onClick={e => {removeNominate(el)}}>Remove</button></div>
+                                    <div>{el.Title} ({el.Year}) <button id="remove-nominate" onClick={e => {removeNominate(el, index)}}>Remove</button></div>
                                 </li>
                             )
                         })}
