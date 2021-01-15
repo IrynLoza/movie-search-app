@@ -6,7 +6,7 @@ import requests
 
 app = Flask(__name__)
 app.secret_key = 'dev'
-app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
+app.config['SECRET_KEY'] = 'key'
 
 #The main endpoint
 @app.route('/')
@@ -31,6 +31,7 @@ def get_titles():
 
 
 
-
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
+    
+
