@@ -13,8 +13,9 @@ function Search() {
 
     const [name, setName] = React.useState('');
     const [movies, setMovies] = React.useState([]);
-    const [pages, setPages] = React.useState([]);
+    const [pages, setPages] = React.useState(0);
     const [nominates, setNominate] = React.useState([]);
+    const [currentPage, setCurrentPage] = React.useState(1)
 
     function search(value) {
         if (name) {
@@ -36,8 +37,10 @@ function Search() {
                                 active: false,
                                 ...el
                             }
-                        }))
-                        setPages(Math.round(data.response.totalResults / 10))
+                        }));
+                        setPages(Math.round(data.response.totalResults / 10));
+                        setCurrentPage(value);
+                        console.log(data.response)
                     }
 
                 })
@@ -115,26 +118,41 @@ function Search() {
                     )
                 })}
             </div>
-            {/* <div className="center"> 
-                {Array.apply(null, Array(pages)).map((el, index) => {
-                    return (
-                        <div className="content_detail__pagination cdp" actpage="1">
-                        <a href="#!-1" class="cdp_i">prev</a>
-                        <a href="#" onClick={() => { search(index + 1) }} key={index}>{index + 1}</a>
-                        <a href="#!+1" class="cdp_i">next</a>
-                        </div>
-                    )
-                })}
-            </div> */}
+            <br></br>
             <div className="center"> 
-                {pages.length === 0 ? undefined : Array.apply(null, Array(pages)).map((el, index) => {
-                    return (
-                        // <a href="#">&laquo;</a>
-                        <a href="#" onClick={() => { search(index + 1) }} key={index}>{index + 1}</a>
-                        // <a href="#">&laquo;</a>
-                    )
-                })}
+                        { (()=> {
+                            if(currentPage - 2 >= 1)
+                            return (
+                                <a href="#"  onClick={() => { search(currentPage-2) }}>{currentPage-2}</a> 
+                            )
+                        })()}
+                        { (()=> {
+                            if(currentPage - 1 >= 1)
+                            return (
+                                <a href="#"  onClick={() => { search(currentPage-1) }}>{currentPage-1}</a> 
+                            )
+                        })()}
+                          { (()=> {
+                            if(movies.length >= 1)
+                            return (
+                                // <a href="#" style={{ color: 'red' }}  onClick={() => { search(currentPage) }}>{currentPage}</a> 
+                                <a href="#" onClick={() => { search(currentPage) }}>{currentPage}</a>
+                            )
+                        })()}                        
+                        { (()=> {
+                            if(currentPage + 1 <= pages)
+                            return (
+                                <a href="#"  onClick={() => { search(currentPage+1) }}>{currentPage+1}</a> 
+                            )
+                        })()}
+                         { (()=> {
+                            if(currentPage + 2 <= pages)
+                            return (
+                                <a href="#"  onClick={() => { search(currentPage+2) }}>{currentPage+2}</a> 
+                            )
+                        })()}
             </div>
+            
             </Col>
                     <Col sm={4}> 
                     <br></br>         
