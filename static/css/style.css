@@ -3,6 +3,7 @@ body {
     background-color: black;
   }
 
+/*Style text*/  
 .title {
     font-family: 'Poppins';
     text-align: center;
@@ -14,7 +15,11 @@ p, h1, h4 {
     font-weight: bold;
 }
 
+.center {
+    text-align: center;
+}
 
+/*Style image*/  
 img {
     border: 1px solid white;
     display: block;
@@ -24,7 +29,7 @@ img {
     max-width: 30%;
 }
 
-
+/*Style search*/  
 .search {
     border-radius: 12px;
     width: 40%;
@@ -35,6 +40,7 @@ img {
     outline: 0;
 }
 
+/*Style buttons*/
 button {
     border: 1px solid white;
     text-align: center;
@@ -42,7 +48,6 @@ button {
     background-color: Transparent;
     border-radius: 12px;
 }  
-
 
 button:hover {
     background-color: rgb(63, 61, 61); 
@@ -59,11 +64,7 @@ button:focus {
     outline: 0;
   }
 
-
-.center {
-    text-align: center;
-}
-
+/*Style pagination*/
 a {
     background-color: white;
     color: black;
@@ -80,12 +81,11 @@ a:hover:not(.active) {
     color: white;
 }
 
-a:focus {
-    /* outline: 0; */
+.focus {
     background-color: transparent;
     border: 1px solid white;
     color: white;
-}
+} 
 
 a:first-child {
     border-top-left-radius: 5px;
