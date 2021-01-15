@@ -84,13 +84,15 @@ function Search() {
                 <Row>
                     <Col>
                     <br></br>
-                    <p>The Shoppies!</p>
+                    <h1>The Shoppies</h1>
                     </Col>
                 </Row>
             
             
                 <Row>
                     <Col> 
+            <br></br>
+            <h4>Movie title</h4>
             <br></br>
             <input className="search" id="search" type="text" placeholder="Search movie" onChange={e => { setName(e.target.value) }} onKeyPress={event => { if (event.key === "Enter") { search() } }}></input>
             <button className="button" name="search" onClick={() => { search(1) }}>Search</button>
@@ -102,36 +104,48 @@ function Search() {
                 <Row>       
                     <Col sm={8}> 
                     <br></br> 
-            <p>Result for "{name}":</p>
+            <h4>Result for {name.length > 0 ? `"${name}"` :  undefined }</h4>
             <div>
-                {movies.map((el, index) => {
+                {movies.length === 0 ? "Search and nominate your favorite movie" : movies.map((el, index) => {
                     return (
                         <div key={index}>
-                            <div className="center"><span className="title">{el.Title}</span><br></br><img height="70" width="50" src={el.Poster}></img><br></br>({el.Year})<br></br><button className="button" id="nominate" disabled={el.active} onClick={e => { nominate(el) }}>Nominate</button><br></br></div>
+                            <br></br>
+                            <div className="center"><span className="title">{el.Title}</span><br></br><img src={el.Poster === 'N/A' ? 'https://upload.wikimedia.org/wikipedia/commons/1/16/No_image_available_450_x_600.svg' : el.Poster}></img>Year of release {el.Year}<br></br><button className="button" id="nominate" disabled={el.active} onClick={e => { nominate(el) }}>Nominate</button><br></br></div>
                         </div>
                     )
                 })}
             </div>
-            <div className="pagination">
-                <a href="#">&laquo;</a>
+            {/* <div className="center"> 
                 {Array.apply(null, Array(pages)).map((el, index) => {
                     return (
+                        <div className="content_detail__pagination cdp" actpage="1">
+                        <a href="#!-1" class="cdp_i">prev</a>
                         <a href="#" onClick={() => { search(index + 1) }} key={index}>{index + 1}</a>
+                        <a href="#!+1" class="cdp_i">next</a>
+                        </div>
                     )
                 })}
-
-
-                <a href="#">&raquo;</a>
+            </div> */}
+            <div className="center"> 
+                {pages.length === 0 ? undefined : Array.apply(null, Array(pages)).map((el, index) => {
+                    return (
+                        // <a href="#">&laquo;</a>
+                        <a href="#" onClick={() => { search(index + 1) }} key={index}>{index + 1}</a>
+                        // <a href="#">&laquo;</a>
+                    )
+                })}
             </div>
             </Col>
                     <Col sm={4}> 
                     <br></br>         
-            <p>Nominations:</p>
+            <h4>Nominations</h4>
+            <br></br>
             <ul>
                 {nominates.map((el, index) => {
                     return (
                         <li key={index}>
                             <div>{el.Title} ({el.Year}) <button className="button" id="remove-nominate" onClick={e => { removeNominate(el, index) }}>Remove</button></div>
+                            <br></br>
                         </li>
                     )
                 })}
