@@ -6,8 +6,7 @@ const Link = ReactRouterDOM.Link;
 const Prompt = ReactRouterDOM.Prompt;
 const Switch = ReactRouterDOM.Switch;
 const Redirect = ReactRouterDOM.Redirect;
-const useLocation = ReactRouterDOM.useLocation;
-const useHistory = ReactRouterDOM.useHistory;
+const { Container, Col, Row } = ReactBootstrap;
 
 //Create component to handle web page with Search
 function Search() {
@@ -16,16 +15,12 @@ function Search() {
     const [movies, setMovies] = React.useState([]);
     const [pages, setPages] = React.useState([]);
     const [nominates, setNominate] = React.useState([]);
-    const [disabled, setDisabled] = React.useState(false)
 
-
-
-    
     function search(value) {
         if (name) {
             fetch('/api/movies', {
-                method: 'POST', 
-                body: JSON.stringify({ name, page: value}),
+                method: 'POST',
+                body: JSON.stringify({ name, page: value }),
                 header: {
                     'Content-Type': 'application/json',
                     // 'Accept': 'application/json'
@@ -43,17 +38,17 @@ function Search() {
                             }
                         }))
                         setPages(Math.round(data.response.totalResults / 10))
-                    } 
+                    }
 
                 })
                 // Handle error
                 .catch(err => {
                     console.log("Error Reading data " + err);
                 });
-        }      
+        }
     }
 
-   
+
 
     function nominate(el) {
         el.active = true;
@@ -61,17 +56,17 @@ function Search() {
         if (nominates.length < 5) {
             setNominate([...nominates, el])
             if (nominates.length === 4) {
-                alert('You did 5 nominates!')
+                toastr["success"]('Congratylations! You successfully did 5 nominates!')
             }
         } else {
-            alert("You've already done 5 nominates")
+            toastr["error"]("You've already done 5 nominates")
             // console.log([...nominates, el])
         }
 
-        
+
     }
 
-  
+
 
     function removeNominate(el, index) {
         // const index = nominates.indexOf(el);
@@ -85,45 +80,65 @@ function Search() {
 
     return (
         <div>
-            <p>The Shoppies!</p>
-            <label htmlFor="search">Movie title</label>
+            <Container>
+                <Row>
+                    <Col>
+                    <br></br>
+                    <p>The Shoppies!</p>
+                    </Col>
+                </Row>
+            
+            
+                <Row>
+                    <Col> 
             <br></br>
-            <input id="search" type="text" placeholder="Search.." onChange={e => { setName(e.target.value)}} onKeyPress={event => {if (event.key === "Enter") {search()}}}></input>
-            <button name="search" onClick={() => { search(1)}}>Search</button>
+            <input className="search" id="search" type="text" placeholder="Search movie" onChange={e => { setName(e.target.value) }} onKeyPress={event => { if (event.key === "Enter") { search() } }}></input>
+            <button className="button" name="search" onClick={() => { search(1) }}>Search</button>
             <br></br>
+            </Col>
+                </Row>
+            
+
+                <Row>       
+                    <Col sm={8}> 
+                    <br></br> 
             <p>Result for "{name}":</p>
-            <ul>
+            <div>
                 {movies.map((el, index) => {
-                            return (
-                                <li key={index}>
-                                    <div><img height="70" width="50" src={el.Poster}></img>{el.Title} ({el.Year}) <button id="nominate" disabled={el.active} onClick={e => {nominate(el)}}>Nominate</button></div>
-                                </li>
-                            )
-                        })}
-            </ul>
+                    return (
+                        <div key={index}>
+                            <div className="center"><span className="title">{el.Title}</span><br></br><img height="70" width="50" src={el.Poster}></img><br></br>({el.Year})<br></br><button className="button" id="nominate" disabled={el.active} onClick={e => { nominate(el) }}>Nominate</button><br></br></div>
+                        </div>
+                    )
+                })}
+            </div>
             <div className="pagination">
                 <a href="#">&laquo;</a>
-                { Array.apply(null, Array(pages)).map((el, index) => {
-                            return (
-                                <a href="#" onClick={() => { search(index+1)}} key={index}>{index+1}</a>
-                            )
-                        })}
+                {Array.apply(null, Array(pages)).map((el, index) => {
+                    return (
+                        <a href="#" onClick={() => { search(index + 1) }} key={index}>{index + 1}</a>
+                    )
+                })}
 
-               
+
                 <a href="#">&raquo;</a>
             </div>
+            </Col>
+                    <Col sm={4}> 
+                    <br></br>         
             <p>Nominations:</p>
             <ul>
                 {nominates.map((el, index) => {
-                            return (
-                                <li key={index}>
-                                    <div>{el.Title} ({el.Year}) <button id="remove-nominate" onClick={e => {removeNominate(el, index)}}>Remove</button></div>
-                                </li>
-                            )
-                        })}
+                    return (
+                        <li key={index}>
+                            <div>{el.Title} ({el.Year}) <button className="button" id="remove-nominate" onClick={e => { removeNominate(el, index) }}>Remove</button></div>
+                        </li>
+                    )
+                })}
             </ul>
-           
-
+            </Col>
+                </Row>
+            </Container>
         </div>
     )
 }
@@ -134,9 +149,7 @@ function App() {
         <Router>
             <div>
                 <Switch>
-                    <Route path="/">
-                        <Search />
-                    </Route>
+                    <Route path="/"><Search /></Route>
                 </Switch>
             </div>
         </Router>
