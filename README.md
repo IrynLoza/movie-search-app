@@ -25,3 +25,7 @@ Install the dependencies from requirements.txt using pip3 install:
 ```python3 server.py```
 
 Open App in localHost and enjoy Movie search App!
+
+OR
+
+Visit https://li-movie-search.herokuapp.com/ to check it out!
